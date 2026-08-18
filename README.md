@@ -24,9 +24,9 @@ Nenhuma página além dessas nesta fase do MVP.
 
 | Camada | Tecnologia |
 |---|---|
-| Framework | Next.js (App Router) + React 19 |
-| Linguagem | TypeScript |
-| Design system | shadcn/ui — Radix UI + Tailwind CSS |
+| Framework | Next.js 16 (App Router) + React 19 |
+| Linguagem | TypeScript 5 |
+| Design system | shadcn/ui — Radix UI + Tailwind CSS 4 |
 | Estado | `useState` + Context API (`ApiContext`) — sem Redux, sem Zustand, sem React Query |
 | Execução | Localhost — sem deploy nesta fase |
 
@@ -77,11 +77,20 @@ Na prática — HTML semântico real (`<button>`, `<form>`, `<label for>`, nunca
 
 ## Estado do repositório
 
-Apenas documentação. Não existe código, `package.json` nem projeto Next.js — o scaffold ainda não foi executado.
+Scaffold executado — o esqueleto do `create-next-app` está no ar e o build passa. Ainda não existe código de produto: `/domain` não foi criado, nenhuma das três páginas foi implementada e o proxy de `/api` ainda não está configurado.
+
+| Comando | O que faz |
+|---|---|
+| `npm run dev` | servidor local na porta 3000 |
+| `npm run build` | build de produção |
+| `npm start` | roda o build |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run lint` | eslint |
 
 ## Documentação
 
 - [ARQUITETURA.md](ARQUITETURA.md) — camadas, fluxo de dados, contrato de API, design system e requisito AI-first
+- [CLAUDE.md](CLAUDE.md) — guia para desenvolvimento assistido por IA neste repositório
 
 ## Débitos técnicos conhecidos
 
