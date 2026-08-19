@@ -4,7 +4,9 @@ Este arquivo orienta o Claude Code (claude.ai/code) ao trabalhar com o código d
 
 ## Estado do repositório
 
-Scaffold executado, **sem código de produto ainda**. Existe o esqueleto do `create-next-app` (`app/layout.tsx`, `app/page.tsx`, `app/globals.css`) e nada de `/domain`. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual este projeto será construído.
+Em construção. Já existem o scaffold, o proxy de `/api`, a paleta com shadcn/ui e a camada `/domain/shared` (`httpClient`, `ApiError`, tipos do contrato, `ApiContext`). Ainda **nenhuma das três páginas foi implementada** — `app/page.tsx` continua sendo a página padrão do Next, e os domínios `feed`, `collection-item` e `auth` não existem. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
+
+O `httpClient` ainda não foi exercitado contra o back-end em runtime: até agora só passou por typecheck, lint e build. A primeira chamada real acontece quando o domínio `auth` existir.
 
 ```bash
 npm run dev        # servidor local na porta 3000

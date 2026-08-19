@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Geist_Mono } from "next/font/google";
+import { ApiProvider } from "@/domain/shared/context/ApiContext";
 import "./globals.css";
 
 /*
@@ -38,7 +39,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${sans.variable} ${heading.variable} ${mono.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ApiProvider>{children}</ApiProvider>
+      </body>
     </html>
   );
 }
