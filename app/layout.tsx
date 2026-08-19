@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Geist_Mono } from "next/font/google";
 import { ApiProvider } from "@/domain/shared/context/ApiContext";
+import { AppHeader } from "@/domain/shared/components/AppHeader";
 import "./globals.css";
 
 /*
@@ -40,7 +41,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${sans.variable} ${heading.variable} ${mono.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ApiProvider>{children}</ApiProvider>
+        <ApiProvider>
+          {/*
+            Atalho para pular o header. O brief exige o fluxo de cadastro
+            operável só por teclado, e sem isto cada Tab começa pelo menu.
+          */}
+          <a
+            href="#conteudo"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+          >
+            Pular para o conteúdo
+          </a>
+          <AppHeader />
+          <main id="conteudo" className="flex-1">
+            {children}
+          </main>
+        </ApiProvider>
       </body>
     </html>
   );
