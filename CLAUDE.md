@@ -4,11 +4,11 @@ Este arquivo orienta o Claude Code (claude.ai/code) ao trabalhar com o código d
 
 ## Estado do repositório
 
-Em construção. Já existem o scaffold, o proxy de `/api`, a paleta com shadcn/ui, a camada `/domain/shared` (`httpClient`, `ApiError`, tipos do contrato, `ApiContext`) e o shell (header fixo com menu hambúrguer, skip link, `AppHeader` e `MainNavSheet`).
+Em construção. Prontos: scaffold, proxy de `/api`, paleta com shadcn/ui, camada `/domain/shared` (`httpClient`, `ApiError`, tipos do contrato, `ApiContext`), shell (`AppHeader`, `MainNavSheet`, skip link) e o domínio `auth` — cadastro, login, `RequireAuth` e a rota `/cadastro`.
 
-Falta o conteúdo das páginas: `app/page.tsx` tem só o H1 do slogan, `/cadastro` e `/dashboard` **ainda não existem como rota** (os links do menu apontam para elas e dão 404), e os domínios `feed`, `collection-item` e `auth` não foram criados. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
+O `httpClient` já foi exercitado contra o back-end no ar: cadastro criando usuário de verdade, login automático em seguida, 409 de e-mail duplicado caindo no campo certo, 401 de credencial errada virando alerta de formulário e `RequireAuth` expulsando anônimo de `/dashboard`.
 
-O `httpClient` ainda não foi exercitado contra o back-end em runtime: até agora só passou por typecheck, lint e build. A primeira chamada real acontece quando o domínio `auth` existir.
+Falta: `app/page.tsx` tem só o H1 do slogan (sem busca nem feed), `/dashboard` é um esqueleto com saudação, e os domínios `feed` e `collection-item` não existem. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
 
 ```bash
 npm run dev        # servidor local na porta 3000

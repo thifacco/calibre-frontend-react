@@ -114,3 +114,9 @@ export interface Session {
   userId: string;
   userName: string;
 }
+
+/**
+ * `loading` cobre o intervalo em que o localStorage ainda não foi lido. Vive
+ * aqui, e não no ApiContext, para os hooks tiparem sem importar o contexto.
+ */
+export type SessionStatus = "loading" | "authenticated" | "anonymous";

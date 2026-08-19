@@ -8,7 +8,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import type { Session } from "../types";
+import type { Session, SessionStatus } from "../types";
 
 /**
  * Estado de sessão compartilhado. É o único lugar que lê e escreve o token —
@@ -29,7 +29,7 @@ const STORAGE_KEY = "calibre.session";
  * render como `anonymous` manda o dashboard de volta para /cadastro a cada
  * F5, mesmo com sessão válida.
  */
-export type SessionStatus = "loading" | "authenticated" | "anonymous";
+export type { SessionStatus };
 
 export interface SessionState {
   status: SessionStatus;
