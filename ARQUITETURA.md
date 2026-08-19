@@ -217,17 +217,30 @@ Cursor, não offset. O `nextCursor` é string opaca — o front devolve exatamen
 
 **shadcn/ui** — componentes copiados para `/components/ui`, Tailwind para estilo, Radix garantindo ARIA nativo por baixo. Não é dependência de pacote fechado: o código é nosso e pode ser editado, mas só quando houver motivo — o padrão é usar como veio.
 
-Tom "atelier de relojoaria":
+Instalado com `--base radix` e preset `nova`. O CLI do shadcn é v4: `--base` escolhe a biblioteca de componentes (`base`, `radix`, `aria`), e o default `base-nova` traria Base UI, não Radix. O brief pede Radix — por isso a flag é obrigatória aqui, não decorativa.
 
-| Papel | Escolha |
-|---|---|
-| Fundo | preto / grafite |
-| Texto | neutros claros, com hierarquia primário / secundário / muted |
-| Destaque | dourado envelhecido |
-| Títulos | serifada — remete a mostrador clássico |
-| Corpo | sans-serif |
+Tom "atelier de relojoaria", em tokens do `globals.css`:
 
-Definidos como CSS variables no `globals.css` e expostos como tokens do Tailwind, para nenhuma cor literal aparecer em componente.
+| Papel | Token | Valor | Cor |
+|---|---|---|---|
+| Fundo | `--background` | `oklch(0.17 0.006 70)` | `#110f0d` |
+| Superfície | `--card` | `oklch(0.21 0.007 70)` | `#1a1815` |
+| Texto | `--foreground` | `oklch(0.93 0.007 80)` | `#eae7e3` |
+| Texto secundário | `--muted-foreground` | `oklch(0.66 0.012 78)` | `#96918a` |
+| Destaque (dourado envelhecido) | `--primary` | `oklch(0.73 0.1 82)` | `#c7a25b` |
+| Divisória | `--border` | `oklch(0.3 0.008 70)` | `#302d2a` |
+| Contorno de campo | `--input` | `oklch(0.52 0.01 70)` | `#6d6863` |
+| Foco | `--ring` | `oklch(0.73 0.1 82)` | `#c7a25b` |
+
+Tipografia via `next/font`: **Playfair Display** nos títulos (`--font-heading`, aplicada a `h1/h2/h3` no `@layer base`) e **Inter** no corpo (`--font-sans`).
+
+Nenhuma cor literal em componente — só estes tokens.
+
+**Tema único e escuro.** `:root` e `.dark` carregam os mesmos valores, e o `<html>` leva a classe `dark` fixa. O escuro é identidade do produto, não preferência de sistema; a classe existe só para as variantes `dark:` dos componentes do shadcn caírem no lado certo. Não há tema claro para manter.
+
+**`--border` e `--input` são separados de propósito.** A borda é divisória decorativa (os separadores do feed) e pode ser discreta — fica em 1,4:1 contra o fundo, o que é aceitável porque não delimita nada interativo. O `--input` contorna campo de formulário, que é componente interativo e cai sob o critério 1.4.11 da WCAG: **3:1 no mínimo**. O valor escolhido dá 3,47:1 sobre o fundo e 3,21:1 sobre o card. Igualar os dois tokens reprova o critério e cega o campo justamente para quem depende de contorno.
+
+Contrastes medidos no browser, com a paleta aplicada: texto sobre fundo 15,5:1, texto secundário 6,1:1, dourado sobre fundo 8,0:1, preto sobre o dourado do botão 8,0:1.
 
 **Header fixo**: logo à esquerda, menu hambúrguer à direita — inclusive em desktop, é decisão de identidade, não de responsividade. O menu abre um `Sheet` do shadcn com Feed, Cadastro/Entrar e Dashboard.
 
