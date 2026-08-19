@@ -1,0 +1,129 @@
+/**
+ * Espelho dos tipos do contrato do back-end (`src/shared/contracts.ts` em
+ * calibre-backend-node). O back-end é a fonte da verdade: divergiu, é aqui
+ * que se corrige, e mudar qualquer coisa deste arquivo significa que o
+ * contrato mudou lá primeiro.
+ */
+
+export type ReactionType = "TOUCHED" | "CURIOUS" | "SAME_STORY";
+
+export type MovementType =
+  | "MANUAL"
+  | "AUTOMATIC"
+  | "QUARTZ"
+  | "ECO_DRIVE"
+  | "SPRING_DRIVE"
+  | "OTHER";
+
+export interface ReactionCounts {
+  touched: number;
+  curious: number;
+  sameStory: number;
+}
+
+export interface FeedItem {
+  id: string;
+  userId: string;
+  /** Desnormalizado pelo back-end — o front não busca usuário separado. */
+  userName: string;
+  brand: string;
+  model: string;
+  referenceNumber?: string;
+  movementType?: MovementType;
+  acquiredYear?: number;
+  acquiredContext?: string;
+  memoryStory: string;
+  photos: string[];
+  reactionCounts: ReactionCounts;
+  commentCount: number;
+  /** ISO 8601. */
+  createdAt: string;
+}
+
+export interface FeedResponse {
+  items: FeedItem[];
+  /** String opaca. O front devolve o que recebeu; `null` é fim da lista. */
+  nextCursor: string | null;
+}
+
+export interface UserItemsResponse {
+  items: FeedItem[];
+}
+
+export interface UserResponse {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
+/** Resposta de POST /api/session. Note `name`, não `userName`. */
+export interface SessionResponse {
+  token: string;
+  userId: string;
+  name: string;
+}
+
+export interface CommentResponse {
+  id: string;
+  itemId: string;
+  userId: string;
+  userName: string;
+  content: string;
+  createdAt: string;
+}
+
+/** Resposta de POST /api/items/:id/reactions — contadores já atualizados. */
+export interface ReactionResponse {
+  reactionCounts: ReactionCounts;
+}
+
+export interface NewCollectionItemInput {
+  brand: string;
+  model: string;
+  referenceNumber?: string;
+  movementType?: MovementType;
+  acquiredYear?: number;
+  acquiredContext?: string;
+  memoryStory: string;
+  photos?: string[];
+}
+
+/* ------------------------------------------------------------------ *
+ * Tipos do front, sem equivalente no contrato.
+ * ------------------------------------------------------------------ */
+
+export interface RegisterInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+/**
+ * Sessão como o front a guarda. Difere de `SessionResponse`: `name` vira
+ * `userName`, para casar com o `userName` que todo `FeedItem` carrega e não
+ * existir dois nomes para a mesma coisa na UI.
+ */
+export interface Session {
+  token: string;
+  userId: string;
+  userName: string;
+}
+
+/**
+ * `loading` cobre o intervalo em que o localStorage ainda não foi lido. Vive
+ * aqui, e não no ApiContext, para os hooks tiparem sem importar o contexto.
+ */
+export type SessionStatus = "loading" | "authenticated" | "anonymous";
+
+/**
+ * Mensagem por campo de formulário. A chave casa com o `name` do input e com
+ * o `field` que o back-end manda em `details` no 400 — é o que permite plugar
+ * o erro do servidor direto no campo certo.
+ */
+export type FieldErrors<TValues> = Partial<Record<keyof TValues, string>>;
