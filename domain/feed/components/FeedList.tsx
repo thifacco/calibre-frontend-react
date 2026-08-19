@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ItemActions } from "@/domain/collection-item/components/ItemActions";
 import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import { FeedEmpty } from "./FeedEmpty";
 import { FeedPost } from "./FeedPost";
-import type { FeedItem } from "@/domain/shared/types";
+import type { FeedItem, ReactionCounts } from "@/domain/shared/types";
 import type { FeedStatus } from "../types";
 
 export interface FeedListProps {
@@ -16,6 +17,8 @@ export interface FeedListProps {
   query: string;
   onLoadMore: () => void;
   onRetry: () => void;
+  onReactionCounts: (itemId: string, counts: ReactionCounts) => void;
+  onCommented: (itemId: string) => void;
 }
 
 function FeedSkeleton() {
@@ -36,6 +39,8 @@ export function FeedList({
   query,
   onLoadMore,
   onRetry,
+  onReactionCounts,
+  onCommented,
 }: FeedListProps) {
   // Desligado enquanto já há requisição em curso: sem isso o sentinela
   // continua visível e pede a mesma página várias vezes.
@@ -78,7 +83,17 @@ export function FeedList({
           leitor de tela e ao agente que o conteúdo é paginado. */}
       <div role="feed" aria-busy={status === "loadingMore"} aria-label="Histórias do clube">
         {items.map((item) => (
-          <FeedPost key={item.id} item={item} />
+          <FeedPost
+            key={item.id}
+            item={item}
+            actions={
+              <ItemActions
+                item={item}
+                onReactionCounts={onReactionCounts}
+                onCommented={onCommented}
+              />
+            }
+          />
         ))}
       </div>
 

@@ -8,7 +8,9 @@ Em construção. Prontos: scaffold, proxy de `/api`, paleta com shadcn/ui, camad
 
 Tudo isso foi verificado contra o back-end no ar, não só compilado: cadastro criando usuário de verdade, 409 de e-mail duplicado caindo no campo certo, 401 de credencial errada virando alerta, `RequireAuth` expulsando anônimo de `/dashboard`, e o feed paginando 20 → 28 itens sem duplicar id, filtrando por busca e zerando o cursor ao trocar de termo.
 
-Falta: `/dashboard` é um esqueleto com saudação, e o domínio `collection-item` (reações, comentário, formulário de novo item) não existe. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
+O domínio `collection-item` já tem reações e comentário, ligados ao feed: reagir aplica os contadores devolvidos pelo back-end, 409 de reação repetida é tratado em silêncio, e comentar incrementa o contador. Anônimo que reage ou comenta vai para `/cadastro`.
+
+Falta: `/dashboard` é um esqueleto com saudação — a lista da coleção e o formulário de novo item ainda não existem. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
 
 **Cuidado ao verificar em browser automatizado.** Com a aba oculta (`document.hidden === true`), o browser suspende o passo de renderização: animações do Radix congelam em `currentTime: 0` — então `Sheet`/`Dialog` não desmontam ao fechar — e callbacks de `IntersectionObserver` não são entregues, então a rolagem infinita não dispara. Nenhum dos dois é bug do produto. Para paginar nesse cenário, use o botão "Carregar mais histórias".
 
@@ -152,6 +154,7 @@ A tabela completa de nomes fixados (campo de busca, botões de reação, campos 
 - Sem CORS no back-end → contornado pelo proxy do Next (acima); um deploy real vai exigir `cors` do lado de lá.
 - Foto é só URL — não existe endpoint de upload nem storage; a drop zone do wireframe não é implementável ainda.
 - Sem `GET` de comentários — só `POST`; a UI mostra o `commentCount` subindo, sem thread visível.
+- Sem rota que diga **quais reações são minhas**. O botão só fica marcado depois de o usuário reagir naquela sessão de página; ao recarregar, a marcação some e um novo clique devolve 409 (tratado em silêncio). Resolver exige `myReactions` no `FeedItem` ou um `GET` de reações.
 - Sem verificação de e-mail no cadastro.
 - Sem renderização no servidor dos dados do feed (adiado de propósito, para manter um caminho de dados só).
 - Sem testes automatizados (fora do escopo desta fase).

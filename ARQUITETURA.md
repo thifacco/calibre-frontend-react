@@ -266,7 +266,9 @@ Nomes fixados agora, para o scaffold não inventar variação depois:
 | Reação "Me tocou" | — | — | `botao-reacao-touched` |
 | Reação "Quero saber mais" | — | — | `botao-reacao-curious` |
 | Reação "Tenho uma história parecida" | — | — | `botao-reacao-same-story` |
-| Comentar | — | — | `botao-comentar` |
+| Comentar (abre o painel) | — | — | `botao-comentar` |
+| Campo de comentário | `comentario-<id do item>` | `content` | `campo-comentario` |
+| Enviar comentário | — | — | `botao-enviar-comentario` |
 | Menu hambúrguer | — | — | `botao-menu` |
 | Cadastro — nome | `cadastro-nome` | `name` | — |
 | Cadastro — e-mail | `cadastro-email` | `email` | — |
@@ -331,7 +333,15 @@ Nesta fase o campo é um input de URL. A drop zone volta quando houver upload no
 
 O contrato tem `POST /api/items/:id/comments`, mas nenhum `GET`. O `FeedItem` traz `commentCount`, não os comentários.
 
-Nesta fase o usuário posta um comentário e vê o contador subir — não existe thread visível. Exibir conversa exige rota nova no back-end.
+Nesta fase o usuário posta um comentário e vê o contador subir — não existe thread visível. Por isso o painel mostra "Comentário enviado." depois do envio: sem thread e sem essa confirmação, o texto simplesmente sumiria e nada pareceria ter acontecido. Exibir conversa exige rota nova no back-end.
+
+### 4. Não existe rota para saber quais reações são minhas
+
+O contrato tem `POST /api/items/:id/reactions`, que devolve os contadores, mas nada que diga quais tipos **este** usuário já usou num item.
+
+Consequência na tela: o botão só fica marcado (`aria-pressed="true"`, cor de destaque) depois de o usuário reagir naquela sessão de página. **Ao recarregar, a marcação some** — os contadores continuam certos, mas o produto não tem como lembrar que a reação foi sua. Clicar de novo devolve 409, que a UI trata em silêncio e remarca o botão.
+
+Resolver de verdade exige `GET` das reações do usuário, ou um campo `myReactions` no `FeedItem`.
 
 ## Invariantes
 

@@ -20,6 +20,8 @@ export function Feed() {
     hasMore,
     loadMore,
     retry,
+    applyReactionCounts,
+    incrementCommentCount,
   } = useFeed();
 
   return (
@@ -36,6 +38,8 @@ export function Feed() {
         query={query}
         onLoadMore={loadMore}
         onRetry={retry}
+        onReactionCounts={applyReactionCounts}
+        onCommented={incrementCommentCount}
       />
     </>
   );
