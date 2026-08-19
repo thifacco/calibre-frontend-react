@@ -68,7 +68,7 @@ Assinatura dos services — o token, quando existe, é sempre o último parâmet
 
 ```ts
 // público
-feedService.getFeed(params: { cursor?: string; q?: string }): Promise<FeedResponse>
+feedService.getFeed(params: { cursor?: string; q?: string }, signal?: AbortSignal): Promise<FeedResponse>
 authService.register(input: RegisterInput): Promise<UserResponse>
 authService.login(input: LoginInput): Promise<SessionResponse>
 
@@ -211,7 +211,11 @@ Espelham os schemas zod do back-end, para dar feedback antes do round-trip:
 
 Cursor, não offset. O `nextCursor` é string opaca — o front devolve exatamente o que recebeu, sem interpretar. `nextCursor: null` é fim da lista.
 
-`useFeed` acumula páginas em um array e `useInfiniteScroll` observa um sentinela no fim da lista com `IntersectionObserver`. Trocar o `q` **descarta as páginas acumuladas e zera o cursor** — cursor de uma busca não vale para outra. A busca é debounced (300ms) para não disparar uma requisição por tecla.
+`useFeed` acumula páginas em um array e `useInfiniteScroll` observa um sentinela no fim da lista com `IntersectionObserver`. Trocar o `q` **descarta as páginas acumuladas e zera o cursor** — cursor de uma busca não vale para outra. A busca é debounced (300ms) para não disparar uma requisição por tecla, e a requisição anterior é abortada por `AbortSignal` para uma resposta atrasada não pintar o resultado da busca errada.
+
+**O sentinela tem um botão junto, e não é enfeite.** "Carregar mais histórias" é a única forma de paginar quando o `IntersectionObserver` não dispara: aba em segundo plano, documento oculto, ou um agente que lê o DOM sem rolar a página. Como o produto precisa ser operável pelo Claude in Chrome, depender só da rolagem deixaria da segunda página em diante inalcançável para ele.
+
+O estado de carregamento é **derivado**, não guardado: `FeedState.loadedQuery` diz a que busca os itens pertencem, e enquanto ela difere da busca atual a tela está carregando. Guardar um `loading` obrigaria a um `setState` síncrono no início do efeito, que a regra `react-hooks/set-state-in-effect` do React 19 reprova por causar renders em cascata.
 
 ## Design system
 

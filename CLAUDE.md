@@ -4,11 +4,13 @@ Este arquivo orienta o Claude Code (claude.ai/code) ao trabalhar com o código d
 
 ## Estado do repositório
 
-Em construção. Prontos: scaffold, proxy de `/api`, paleta com shadcn/ui, camada `/domain/shared` (`httpClient`, `ApiError`, tipos do contrato, `ApiContext`), shell (`AppHeader`, `MainNavSheet`, skip link) e o domínio `auth` — cadastro, login, `RequireAuth` e a rota `/cadastro`.
+Em construção. Prontos: scaffold, proxy de `/api`, paleta com shadcn/ui, camada `/domain/shared`, shell (`AppHeader`, `MainNavSheet`, skip link), domínio `auth` (cadastro, login, `RequireAuth`, rota `/cadastro`) e domínio `feed` (landing com busca debounced e paginação por cursor).
 
-O `httpClient` já foi exercitado contra o back-end no ar: cadastro criando usuário de verdade, login automático em seguida, 409 de e-mail duplicado caindo no campo certo, 401 de credencial errada virando alerta de formulário e `RequireAuth` expulsando anônimo de `/dashboard`.
+Tudo isso foi verificado contra o back-end no ar, não só compilado: cadastro criando usuário de verdade, 409 de e-mail duplicado caindo no campo certo, 401 de credencial errada virando alerta, `RequireAuth` expulsando anônimo de `/dashboard`, e o feed paginando 20 → 28 itens sem duplicar id, filtrando por busca e zerando o cursor ao trocar de termo.
 
-Falta: `app/page.tsx` tem só o H1 do slogan (sem busca nem feed), `/dashboard` é um esqueleto com saudação, e os domínios `feed` e `collection-item` não existem. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
+Falta: `/dashboard` é um esqueleto com saudação, e o domínio `collection-item` (reações, comentário, formulário de novo item) não existe. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
+
+**Cuidado ao verificar em browser automatizado.** Com a aba oculta (`document.hidden === true`), o browser suspende o passo de renderização: animações do Radix congelam em `currentTime: 0` — então `Sheet`/`Dialog` não desmontam ao fechar — e callbacks de `IntersectionObserver` não são entregues, então a rolagem infinita não dispara. Nenhum dos dois é bug do produto. Para paginar nesse cenário, use o botão "Carregar mais histórias".
 
 ```bash
 npm run dev        # servidor local na porta 3000
