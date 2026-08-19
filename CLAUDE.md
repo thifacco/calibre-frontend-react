@@ -8,9 +8,9 @@ Em construção. Prontos: scaffold, proxy de `/api`, paleta com shadcn/ui, camad
 
 Tudo isso foi verificado contra o back-end no ar, não só compilado: cadastro criando usuário de verdade, 409 de e-mail duplicado caindo no campo certo, 401 de credencial errada virando alerta, `RequireAuth` expulsando anônimo de `/dashboard`, e o feed paginando 20 → 28 itens sem duplicar id, filtrando por busca e zerando o cursor ao trocar de termo.
 
-O domínio `collection-item` já tem reações e comentário, ligados ao feed: reagir aplica os contadores devolvidos pelo back-end, 409 de reação repetida é tratado em silêncio, e comentar incrementa o contador. Anônimo que reage ou comenta vai para `/cadastro`.
+O domínio `collection-item` está completo: reações e comentário ligados ao feed, e no `/dashboard` a lista da coleção (com `<details>` nativo expandindo os campos opcionais) mais o formulário de novo relógio com os oito campos do brief.
 
-Falta: `/dashboard` é um esqueleto com saudação — a lista da coleção e o formulário de novo item ainda não existem. `README.md` e `ARQUITETURA.md` são a especificação a partir da qual o resto será construído.
+**As três páginas do MVP estão implementadas.** O que falta é a auditoria AI-first com o Claude in Chrome — conferir a tabela de `id`/`name`/`data-testid` contra o DOM real e rodar o fluxo de cadastro por teclado.
 
 **Cuidado ao verificar em browser automatizado.** Com a aba oculta (`document.hidden === true`), o browser suspende o passo de renderização: animações do Radix congelam em `currentTime: 0` — então `Sheet`/`Dialog` não desmontam ao fechar — e callbacks de `IntersectionObserver` não são entregues, então a rolagem infinita não dispara. Nenhum dos dois é bug do produto. Para paginar nesse cenário, use o botão "Carregar mais histórias".
 

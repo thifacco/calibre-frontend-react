@@ -120,3 +120,10 @@ export interface Session {
  * aqui, e não no ApiContext, para os hooks tiparem sem importar o contexto.
  */
 export type SessionStatus = "loading" | "authenticated" | "anonymous";
+
+/**
+ * Mensagem por campo de formulário. A chave casa com o `name` do input e com
+ * o `field` que o back-end manda em `details` no 400 — é o que permite plugar
+ * o erro do servidor direto no campo certo.
+ */
+export type FieldErrors<TValues> = Partial<Record<keyof TValues, string>>;

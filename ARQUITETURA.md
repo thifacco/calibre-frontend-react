@@ -45,11 +45,12 @@ O back-end vive em repositório separado (`calibre-backend-node`) e roda em `htt
 ### Dependência entre domínios
 
 ```
-feed → collection-item → shared
-auth → shared
+feed → collection-item → auth → shared
 ```
 
-Unidirecional. `feed` compõe `ReactionBar` e `CommentForm` de `collection-item` porque reagir e comentar são operações **sobre um item**, não sobre o feed — o feed só é onde elas aparecem. `collection-item` nunca importa de `feed`.
+Unidirecional e sem ciclo. `feed` compõe `ReactionBar` e `CommentForm` de `collection-item` porque reagir e comentar são operações **sobre um item**, não sobre o feed — o feed só é onde elas aparecem. `collection-item` nunca importa de `feed`.
+
+`collection-item → auth` existe porque toda rota de item exige Bearer, e quem resolve o token é o `useSession`. A alternativa seria mover a sessão inteira para `shared`, mas o 401 tem política de produto junto (deslogar e mandar para `/cadastro`), e isso é assunto de `auth`.
 
 ## Fluxo de dados
 
