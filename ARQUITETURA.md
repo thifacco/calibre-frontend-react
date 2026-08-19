@@ -291,6 +291,17 @@ Nomes fixados agora, para o scaffold não inventar variação depois:
 
 Os `id` e `data-testid` do cadastro e do formulário de item vieram dos wireframes — mantidos literalmente para não quebrar continuidade.
 
+### Resultado da auditoria
+
+Conferido contra o DOM real das três páginas, com o produto rodando:
+
+- **21 elementos nomeados**, todos presentes com o `id`/`name` da tabela. Nenhuma divergência.
+- Nenhum campo sem `<label for>` associado, nenhum botão sem nome acessível, nenhum `id` duplicado, nenhum `aria-describedby`/`aria-controls` apontando para id inexistente.
+- Nenhum `useId()` e nenhum `<div onClick>` no código — os elementos interativos são `<button>`, `<a>` e `<details>`/`<summary>`.
+- **Cadastro completo só por teclado**, no Chrome real: `Tab` percorre nome → e-mail → senha → confirmação na ordem, digitação preenche, `Enter` submete, e o fluxo termina autenticado em `/dashboard`.
+
+O `<select>` de movimento é nativo em vez do Select do shadcn justamente por isto: o do shadcn é um combobox do Radix, um botão que abre listbox em portal — acessível, porém bem mais difícil de operar por DOM que um `<select>`.
+
 ## Pendências com o back-end
 
 Três lacunas reais do contrato atual. Nenhuma se resolve dentro deste repositório sozinha.

@@ -10,9 +10,12 @@ Tudo isso foi verificado contra o back-end no ar, não só compilado: cadastro c
 
 O domínio `collection-item` está completo: reações e comentário ligados ao feed, e no `/dashboard` a lista da coleção (com `<details>` nativo expandindo os campos opcionais) mais o formulário de novo relógio com os oito campos do brief.
 
-**As três páginas do MVP estão implementadas.** O que falta é a auditoria AI-first com o Claude in Chrome — conferir a tabela de `id`/`name`/`data-testid` contra o DOM real e rodar o fluxo de cadastro por teclado.
+**As três páginas do MVP estão implementadas e auditadas.** A auditoria AI-first passou: os 21 elementos nomeados batem com a tabela do `ARQUITETURA.md`, não há campo sem rótulo nem `id` duplicado, e o cadastro roda de ponta a ponta só por teclado no Chrome real. O resultado detalhado está no `ARQUITETURA.md`, em "Resultado da auditoria".
 
-**Cuidado ao verificar em browser automatizado.** Com a aba oculta (`document.hidden === true`), o browser suspende o passo de renderização: animações do Radix congelam em `currentTime: 0` — então `Sheet`/`Dialog` não desmontam ao fechar — e callbacks de `IntersectionObserver` não são entregues, então a rolagem infinita não dispara. Nenhum dos dois é bug do produto. Para paginar nesse cenário, use o botão "Carregar mais histórias".
+**Cuidado ao verificar em browser automatizado.** Os dois efeitos abaixo aparecem com a aba oculta (`document.hidden === true`) e **nenhum é bug do produto**:
+
+- **Rolagem infinita não dispara** na pane do browser embutido, porque ali o passo de renderização é suspenso e os callbacks de `IntersectionObserver` nunca são entregues. **No Chrome real ela funciona** — verificado: 20 → 29 posts ao rolar, sem id duplicado. Se precisar paginar na pane embutida, use o botão "Carregar mais histórias".
+- **O `Sheet` não desmonta ao fechar.** O estado vai para `data-state="closed"` corretamente, mas o Radix espera `animationend` para desmontar, e aba oculta não roda animação CSS. O menu segue visível na tela e na árvore de acessibilidade — DOM e tela concordam, então não é uma inconsistência de acessibilidade. Em aba visível a animação roda e ele desmonta.
 
 ```bash
 npm run dev        # servidor local na porta 3000
